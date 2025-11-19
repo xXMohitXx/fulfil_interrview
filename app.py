@@ -39,11 +39,16 @@ def trigger_webhooks(event_type, product_data):
         with app.app_context():
             # Find all active webhooks that listen to this event type
             active_webhooks = Webhook.query.filter(
-                Webhook.active == True,
-                Webhook.event_types.contains([event_type])
+                Webhook.active == True
             ).all()
             
-            if not active_webhooks:
+            # Filter webhooks that contain the event type in their event_types JSON array
+            matching_webhooks = []
+            for webhook in active_webhooks:
+                if webhook.event_types and event_type in webhook.event_types:
+                    matching_webhooks.append(webhook)
+            
+            if not matching_webhooks:
                 return
             
             # Prepare webhook payload
@@ -93,7 +98,7 @@ def trigger_webhooks(event_type, product_data):
                             db.session.rollback()
             
             # Send webhooks in separate threads
-            for webhook in active_webhooks:
+            for webhook in matching_webhooks:
                 thread = threading.Thread(target=send_webhook, args=(webhook, payload))
                 thread.daemon = True
                 thread.start()
