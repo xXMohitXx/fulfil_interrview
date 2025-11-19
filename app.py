@@ -12,14 +12,8 @@ def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
     
-    # Initialize extensions with engine options
+    # Initialize extensions
     db.init_app(app)
-    
-    # Configure database engine options for Supabase
-    with app.app_context():
-        engine_options = getattr(app.config, 'SQLALCHEMY_ENGINE_OPTIONS', {})
-        if engine_options:
-            db.engine = db.get_engine(options=engine_options)
     
     CORS(app)
     
@@ -392,8 +386,8 @@ def process_csv_file(filepath, filename):
             if not found:
                 raise Exception(f"Missing required column: {required_col}")
         
-        # Process rows in batches
-        batch_size = 1000
+        # Process rows in smaller batches for better real-time updates
+        batch_size = 100
         processed_rows = 0
         success_count = 0
         error_count = 0
@@ -439,8 +433,8 @@ def process_csv_file(filepath, filename):
                 
                 processed_rows += 1
                 
-                # Update progress in Redis and database every 100 rows
-                if processed_rows % 100 == 0:
+                # Update progress in Redis and database every 50 rows for more frequent updates
+                if processed_rows % 50 == 0:
                     progress_data = {
                         'task_id': task_id,
                         'filename': filename,
@@ -463,7 +457,11 @@ def process_csv_file(filepath, filename):
                     upload_log.processed_rows = processed_rows
                     upload_log.success_count = success_count
                     upload_log.error_count = error_count
-                    db.session.commit()
+                    try:
+                        db.session.commit()
+                    except Exception as commit_error:
+                        db.session.rollback()
+                        print(f"Commit error: {commit_error}")
             
             # Commit batch
             db.session.commit()

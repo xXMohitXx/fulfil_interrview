@@ -1,133 +1,57 @@
-2025-11-19T11:16:21.13773889Z   File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
-2025-11-19T11:16:21.13774184Z   File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
-2025-11-19T11:16:21.13774466Z   File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
-2025-11-19T11:16:21.13774769Z   File "<frozen importlib._bootstrap_external>", line 1026, in exec_module
-2025-11-19T11:16:21.13775027Z   File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
-2025-11-19T11:16:21.13775317Z   File "/opt/render/project/src/app.py", line 9, in <module>
-2025-11-19T11:16:21.137772201Z     from models import db, Product, Webhook, UploadLog
-2025-11-19T11:16:21.13777499Z   File "/opt/render/project/src/models.py", line 1, in <module>
-2025-11-19T11:16:21.13777759Z     from flask_sqlalchemy import SQLAlchemy
-2025-11-19T11:16:21.137780501Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/flask_sqlalchemy/__init__.py", line 5, in <module>
-2025-11-19T11:16:21.137783231Z     from .extension import SQLAlchemy
-2025-11-19T11:16:21.137785901Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/flask_sqlalchemy/extension.py", line 9, in <module>
-2025-11-19T11:16:21.137788421Z     import sqlalchemy as sa
-2025-11-19T11:16:21.137805351Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/sqlalchemy/__init__.py", line 13, in <module>
-2025-11-19T11:16:21.137808541Z     from .engine import AdaptedConnection as AdaptedConnection
-2025-11-19T11:16:21.137811201Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/sqlalchemy/engine/__init__.py", line 18, in <module>
-2025-11-19T11:16:21.137813871Z     from . import events as events
-2025-11-19T11:16:21.137816401Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/sqlalchemy/engine/events.py", line 19, in <module>
-2025-11-19T11:16:21.137819141Z     from .base import Connection
-2025-11-19T11:16:21.137821661Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 30, in <module>
-2025-11-19T11:16:21.137824391Z     from .interfaces import BindTyping
-2025-11-19T11:16:21.137827501Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/sqlalchemy/engine/interfaces.py", line 38, in <module>
-2025-11-19T11:16:21.137833401Z     from ..sql.compiler import Compiled as Compiled
-2025-11-19T11:16:21.137836121Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/sqlalchemy/sql/__init__.py", line 14, in <module>
-2025-11-19T11:16:21.137839401Z     from .compiler import COLLECT_CARTESIAN_PRODUCTS as COLLECT_CARTESIAN_PRODUCTS
-2025-11-19T11:16:21.137842091Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/sqlalchemy/sql/compiler.py", line 61, in <module>
-2025-11-19T11:16:21.137844731Z     from . import crud
-2025-11-19T11:16:21.137847582Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/sqlalchemy/sql/crud.py", line 34, in <module>
-2025-11-19T11:16:21.137850171Z     from . import dml
-2025-11-19T11:16:21.137852702Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/sqlalchemy/sql/dml.py", line 34, in <module>
-2025-11-19T11:16:21.137855522Z     from . import util as sql_util
-2025-11-19T11:16:21.137858052Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/sqlalchemy/sql/util.py", line 46, in <module>
-2025-11-19T11:16:21.137860882Z     from .ddl import sort_tables as sort_tables  # noqa: F401
-2025-11-19T11:16:21.137863762Z     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-2025-11-19T11:16:21.137866452Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/sqlalchemy/sql/ddl.py", line 30, in <module>
-2025-11-19T11:16:21.137869092Z     from .elements import ClauseElement
-2025-11-19T11:16:21.137871792Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/sqlalchemy/sql/elements.py", line 808, in <module>
-2025-11-19T11:16:21.137874532Z     class SQLCoreOperations(Generic[_T_co], ColumnOperators, TypingOnly):
-2025-11-19T11:16:21.137877182Z     ...<472 lines>...
-2025-11-19T11:16:21.137879792Z                 ...
-2025-11-19T11:16:21.137882432Z   File "/opt/render/project/python/Python-3.13.4/lib/python3.13/typing.py", line 1257, in _generic_init_subclass
-2025-11-19T11:16:21.137885332Z     super(Generic, cls).__init_subclass__(*args, **kwargs)
-2025-11-19T11:16:21.137894692Z     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
-2025-11-19T11:16:21.137898022Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/sqlalchemy/util/langhelpers.py", line 1988, in __init_subclass__
-2025-11-19T11:16:21.137900682Z     raise AssertionError(
-2025-11-19T11:16:21.137905732Z     ...<2 lines>...
-2025-11-19T11:16:21.137908252Z     )
-2025-11-19T11:16:21.137921512Z AssertionError: Class <class 'sqlalchemy.sql.elements.SQLCoreOperations'> directly inherits TypingOnly but has additional attributes {'__firstlineno__', '__static_attributes__'}.
-2025-11-19T11:16:24.081938454Z ==> Exited with status 1
-2025-11-19T11:16:24.096979418Z ==> Common ways to troubleshoot your deploy: https://render.com/docs/troubleshooting-deploys
-2025-11-19T11:16:27.990655599Z ==> Running 'gunicorn app:app --bind 0.0.0.0:$PORT --workers 2 --timeout 120'
-2025-11-19T11:16:32.784192929Z Traceback (most recent call last):
-2025-11-19T11:16:32.87800093Z   File "/opt/render/project/src/.venv/bin/gunicorn", line 8, in <module>
-2025-11-19T11:16:32.87801914Z     sys.exit(run())
-2025-11-19T11:16:32.87802222Z              ~~~^^
-2025-11-19T11:16:32.87802548Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/gunicorn/app/wsgiapp.py", line 67, in run
-2025-11-19T11:16:32.87803279Z     WSGIApplication("%(prog)s [OPTIONS] [APP_MODULE]").run()
-2025-11-19T11:16:32.87803531Z     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
-2025-11-19T11:16:32.87803752Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/gunicorn/app/base.py", line 236, in run
-2025-11-19T11:16:32.87803978Z     super().run()
-2025-11-19T11:16:32.87804187Z     ~~~~~~~~~~~^^
-2025-11-19T11:16:32.87804407Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/gunicorn/app/base.py", line 72, in run
-2025-11-19T11:16:32.87804617Z     Arbiter(self).run()
-2025-11-19T11:16:32.87804822Z     ~~~~~~~^^^^^^
-2025-11-19T11:16:32.87805032Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/gunicorn/arbiter.py", line 58, in __init__
-2025-11-19T11:16:32.87805255Z     self.setup(app)
-2025-11-19T11:16:32.87805488Z     ~~~~~~~~~~^^^^^
-2025-11-19T11:16:32.87805696Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/gunicorn/arbiter.py", line 118, in setup
-2025-11-19T11:16:32.87805899Z     self.app.wsgi()
-2025-11-19T11:16:32.87806107Z     ~~~~~~~~~~~~~^^
-2025-11-19T11:16:32.87806316Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/gunicorn/app/base.py", line 67, in wsgi
-2025-11-19T11:16:32.87806607Z     self.callable = self.load()
-2025-11-19T11:16:32.87806813Z                     ~~~~~~~~~^^
-2025-11-19T11:16:32.878073131Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/gunicorn/app/wsgiapp.py", line 58, in load
-2025-11-19T11:16:32.87807532Z     return self.load_wsgiapp()
-2025-11-19T11:16:32.878077431Z            ~~~~~~~~~~~~~~~~~^^
-2025-11-19T11:16:32.87808022Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/gunicorn/app/wsgiapp.py", line 48, in load_wsgiapp
-2025-11-19T11:16:32.87808298Z     return util.import_app(self.app_uri)
-2025-11-19T11:16:32.878085051Z            ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
-2025-11-19T11:16:32.878087191Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/gunicorn/util.py", line 371, in import_app
-2025-11-19T11:16:32.878089271Z     mod = importlib.import_module(module)
-2025-11-19T11:16:32.878091471Z   File "/opt/render/project/python/Python-3.13.4/lib/python3.13/importlib/__init__.py", line 88, in import_module
-2025-11-19T11:16:32.878093671Z     return _bootstrap._gcd_import(name[level:], package, level)
-2025-11-19T11:16:32.878095871Z            ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-2025-11-19T11:16:32.878098111Z   File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
-2025-11-19T11:16:32.878100431Z   File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
-2025-11-19T11:16:32.878102621Z   File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
-2025-11-19T11:16:32.878104591Z   File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
-2025-11-19T11:16:32.878108851Z   File "<frozen importlib._bootstrap_external>", line 1026, in exec_module
-2025-11-19T11:16:32.878111231Z   File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
-2025-11-19T11:16:32.878113431Z   File "/opt/render/project/src/app.py", line 9, in <module>
-2025-11-19T11:16:32.878124591Z     from models import db, Product, Webhook, UploadLog
-2025-11-19T11:16:32.878127271Z   File "/opt/render/project/src/models.py", line 1, in <module>
-2025-11-19T11:16:32.878129571Z     from flask_sqlalchemy import SQLAlchemy
-2025-11-19T11:16:32.878131761Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/flask_sqlalchemy/__init__.py", line 5, in <module>
-2025-11-19T11:16:32.878134001Z     from .extension import SQLAlchemy
-2025-11-19T11:16:32.878136311Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/flask_sqlalchemy/extension.py", line 9, in <module>
-2025-11-19T11:16:32.878138601Z     import sqlalchemy as sa
-2025-11-19T11:16:32.878140871Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/sqlalchemy/__init__.py", line 13, in <module>
-2025-11-19T11:16:32.878143171Z     from .engine import AdaptedConnection as AdaptedConnection
-2025-11-19T11:16:32.878145631Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/sqlalchemy/engine/__init__.py", line 18, in <module>
-2025-11-19T11:16:32.878147872Z     from . import events as events
-2025-11-19T11:16:32.878150132Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/sqlalchemy/engine/events.py", line 19, in <module>
-2025-11-19T11:16:32.878152261Z     from .base import Connection
-2025-11-19T11:16:32.878154421Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 30, in <module>
-2025-11-19T11:16:32.878156712Z     from .interfaces import BindTyping
-2025-11-19T11:16:32.878159032Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/sqlalchemy/engine/interfaces.py", line 38, in <module>
-2025-11-19T11:16:32.878161692Z     from ..sql.compiler import Compiled as Compiled
-2025-11-19T11:16:32.878163792Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/sqlalchemy/sql/__init__.py", line 14, in <module>
-2025-11-19T11:16:32.878166472Z     from .compiler import COLLECT_CARTESIAN_PRODUCTS as COLLECT_CARTESIAN_PRODUCTS
-2025-11-19T11:16:32.878168742Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/sqlalchemy/sql/compiler.py", line 61, in <module>
-2025-11-19T11:16:32.878170912Z     from . import crud
-2025-11-19T11:16:32.878173222Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/sqlalchemy/sql/crud.py", line 34, in <module>
-2025-11-19T11:16:32.878193642Z     from . import dml
-2025-11-19T11:16:32.878196572Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/sqlalchemy/sql/dml.py", line 34, in <module>
-2025-11-19T11:16:32.878199262Z     from . import util as sql_util
-2025-11-19T11:16:32.878201642Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/sqlalchemy/sql/util.py", line 46, in <module>
-2025-11-19T11:16:32.878204022Z     from .ddl import sort_tables as sort_tables  # noqa: F401
-2025-11-19T11:16:32.878206372Z     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-2025-11-19T11:16:32.878208752Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/sqlalchemy/sql/ddl.py", line 30, in <module>
-2025-11-19T11:16:32.878210942Z     from .elements import ClauseElement
-2025-11-19T11:16:32.878213292Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/sqlalchemy/sql/elements.py", line 808, in <module>
-2025-11-19T11:16:32.878215672Z     class SQLCoreOperations(Generic[_T_co], ColumnOperators, TypingOnly):
-2025-11-19T11:16:32.878217822Z     ...<472 lines>...
-2025-11-19T11:16:32.878219972Z                 ...
-2025-11-19T11:16:32.878222242Z   File "/opt/render/project/python/Python-3.13.4/lib/python3.13/typing.py", line 1257, in _generic_init_subclass
-2025-11-19T11:16:32.878224402Z     super(Generic, cls).__init_subclass__(*args, **kwargs)
-2025-11-19T11:16:32.878231353Z     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
-2025-11-19T11:16:32.878234662Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/sqlalchemy/util/langhelpers.py", line 1988, in __init_subclass__
-2025-11-19T11:16:32.878236843Z     raise AssertionError(
-2025-11-19T11:16:32.878239073Z     ...<2 lines>...
-2025-11-19T11:16:32.878241283Z     )
-2025-11-19T11:16:32.878245853Z AssertionError: Class <class 'sqlalchemy.sql.elements.SQLCoreOperations'> directly inherits TypingOnly but has additional attributes {'__firstlineno__', '__static_attributes__'}.
+2025-11-19T11:36:03.972553408Z Using cached click_plugins-1.1.1.2-py2.py3-none-any.whl (11 kB)
+2025-11-19T11:36:03.973597914Z Using cached click_repl-0.3.0-py3-none-any.whl (10 kB)
+2025-11-19T11:36:03.974722596Z Using cached dnspython-2.8.0-py3-none-any.whl (331 kB)
+2025-11-19T11:36:03.976087055Z Using cached greenlet-3.2.4-cp313-cp313-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl (610 kB)
+2025-11-19T11:36:03.977761437Z Using cached itsdangerous-2.2.0-py3-none-any.whl (16 kB)
+2025-11-19T11:36:03.978839785Z Using cached jinja2-3.1.6-py3-none-any.whl (134 kB)
+2025-11-19T11:36:03.980050563Z Using cached markupsafe-3.0.3-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (22 kB)
+2025-11-19T11:36:03.981188846Z Using cached prompt_toolkit-3.0.52-py3-none-any.whl (391 kB)
+2025-11-19T11:36:03.982687024Z Using cached python_dateutil-2.9.0.post0-py2.py3-none-any.whl (229 kB)
+2025-11-19T11:36:03.983959047Z Using cached python_engineio-4.12.3-py3-none-any.whl (59 kB)
+2025-11-19T11:36:03.985431624Z Using cached pytz-2025.2-py2.py3-none-any.whl (509 kB)
+2025-11-19T11:36:03.994915843Z Downloading scramp-1.4.6-py3-none-any.whl (12 kB)
+2025-11-19T11:36:04.01357887Z Downloading asn1crypto-1.5.1-py2.py3-none-any.whl (105 kB)
+2025-11-19T11:36:04.035310139Z Using cached setuptools-80.9.0-py3-none-any.whl (1.2 MB)
+2025-11-19T11:36:04.038003505Z Using cached simple_websocket-1.1.0-py3-none-any.whl (13 kB)
+2025-11-19T11:36:04.039434269Z Using cached six-1.17.0-py2.py3-none-any.whl (11 kB)
+2025-11-19T11:36:04.040918516Z Using cached tzdata-2025.2-py2.py3-none-any.whl (347 kB)
+2025-11-19T11:36:04.042742289Z Using cached packaging-25.0-py3-none-any.whl (66 kB)
+2025-11-19T11:36:04.044238698Z Using cached wcwidth-0.2.14-py2.py3-none-any.whl (37 kB)
+2025-11-19T11:36:04.045761659Z Using cached wsproto-1.3.1-py3-none-any.whl (24 kB)
+2025-11-19T11:36:04.047171701Z Using cached h11-0.16.0-py3-none-any.whl (37 kB)
+2025-11-19T11:36:04.169305617Z Installing collected packages: pytz, billiard, asn1crypto, wcwidth, vine, urllib3, tzdata, six, setuptools, scramp, redis, python-dotenv, packaging, MarkupSafe, itsdangerous, idna, h11, greenlet, dnspython, click, charset-normalizer, certifi, blinker, bidict, wsproto, werkzeug, SQLAlchemy, requests, python-dateutil, prompt-toolkit, Jinja2, gunicorn, eventlet, click-plugins, click-didyoumean, amqp, simple-websocket, pg8000, kombu, Flask, click-repl, python-engineio, Flask-SQLAlchemy, Flask-CORS, celery, python-socketio, flask-socketio
+2025-11-19T11:36:11.702294443Z 
+2025-11-19T11:36:11.707233561Z Successfully installed Flask-2.3.3 Flask-CORS-4.0.0 Flask-SQLAlchemy-2.5.1 Jinja2-3.1.6 MarkupSafe-3.0.3 SQLAlchemy-1.4.53 amqp-5.3.1 asn1crypto-1.5.1 bidict-0.23.1 billiard-3.6.4.0 blinker-1.9.0 celery-5.2.7 certifi-2025.11.12 charset-normalizer-3.4.4 click-8.3.1 click-didyoumean-0.3.1 click-plugins-1.1.1.2 click-repl-0.3.0 dnspython-2.8.0 eventlet-0.33.3 flask-socketio-5.3.6 greenlet-3.2.4 gunicorn-20.1.0 h11-0.16.0 idna-3.11 itsdangerous-2.2.0 kombu-5.6.0 packaging-25.0 pg8000-1.30.2 prompt-toolkit-3.0.52 python-dateutil-2.9.0.post0 python-dotenv-1.0.0 python-engineio-4.12.3 python-socketio-5.8.0 pytz-2025.2 redis-4.5.5 requests-2.31.0 scramp-1.4.6 setuptools-80.9.0 simple-websocket-1.1.0 six-1.17.0 tzdata-2025.2 urllib3-2.5.0 vine-5.1.0 wcwidth-0.2.14 werkzeug-2.3.7 wsproto-1.3.1
+2025-11-19T11:36:11.714009864Z 
+2025-11-19T11:36:11.714024615Z [notice] A new release of pip is available: 25.1.1 -> 25.3
+2025-11-19T11:36:11.714030055Z [notice] To update, run: pip install --upgrade pip
+2025-11-19T11:36:13.404994073Z ==> Uploading build...
+2025-11-19T11:36:32.216993173Z ==> Uploaded in 15.1s. Compression took 3.7s
+2025-11-19T11:36:32.302301543Z ==> Build successful 🎉
+2025-11-19T11:36:39.678776094Z ==> Deploying...
+2025-11-19T11:49:45.532332645Z ==> No open ports detected, continuing to scan...
+2025-11-19T11:49:45.666611606Z ==> Docs on specifying a port: https://render.com/docs/web-services#port-binding
+2025-11-19T11:49:49.997420445Z ==> Running 'gunicorn app:app --bind 0.0.0.0:$PORT --workers 2 --timeout 120'
+2025-11-19T11:49:51.931564518Z /opt/render/project/src/.venv/lib/python3.13/site-packages/gunicorn/util.py:25: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+2025-11-19T11:49:51.931584869Z   import pkg_resources
+2025-11-19T11:50:02.188688737Z [2025-11-19 11:50:02 +0000] [56] [INFO] Starting gunicorn 20.1.0
+2025-11-19T11:50:02.18924873Z [2025-11-19 11:50:02 +0000] [56] [INFO] Listening at: http://0.0.0.0:10000 (56)
+2025-11-19T11:50:02.189294373Z [2025-11-19 11:50:02 +0000] [56] [INFO] Using worker: sync
+2025-11-19T11:50:02.227153932Z [2025-11-19 11:50:02 +0000] [58] [INFO] Booting worker with pid: 58
+2025-11-19T11:50:02.256222248Z [2025-11-19 11:50:02 +0000] [59] [INFO] Booting worker with pid: 59
+2025-11-19T11:50:02.868542577Z 127.0.0.1 - - [19/Nov/2025:11:50:02 +0000] "HEAD / HTTP/1.1" 200 0 "-" "Go-http-client/1.1"
+2025-11-19T11:50:10.747422896Z ==> Your service is live 🎉
+2025-11-19T11:50:10.800786965Z ==> 
+2025-11-19T11:50:11.72571683Z ==> ///////////////////////////////////////////////////////////
+2025-11-19T11:50:11.78050528Z ==> 
+2025-11-19T11:50:11.838639679Z ==> Available at your primary URL https://acme-product-import-web.onrender.com
+2025-11-19T11:50:11.894477599Z ==> 
+2025-11-19T11:50:11.947176498Z ==> ///////////////////////////////////////////////////////////
+2025-11-19T11:50:15.618693927Z 127.0.0.1 - - [19/Nov/2025:11:50:15 +0000] "GET / HTTP/1.1" 200 42689 "-" "Go-http-client/2.0"
+2025-11-19T11:51:15.996220062Z 127.0.0.1 - - [19/Nov/2025:11:51:15 +0000] "GET / HTTP/1.1" 200 42689 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+2025-11-19T11:51:20.522084604Z 127.0.0.1 - - [19/Nov/2025:11:51:20 +0000] "GET /api/products?page=1&per_page=20 HTTP/1.1" 500 239 "https://acme-product-import-web.onrender.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+2025-11-19T11:51:20.588089111Z 127.0.0.1 - - [19/Nov/2025:11:51:20 +0000] "GET /api/webhooks HTTP/1.1" 500 239 "https://acme-product-import-web.onrender.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+2025-11-19T11:51:21.468480748Z 127.0.0.1 - - [19/Nov/2025:11:51:21 +0000] "GET /api/products?page=1&per_page=20 HTTP/1.1" 500 239 "https://acme-product-import-web.onrender.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+2025-11-19T11:51:32.199575022Z 127.0.0.1 - - [19/Nov/2025:11:51:32 +0000] "GET /api/webhooks HTTP/1.1" 500 239 "https://acme-product-import-web.onrender.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+2025-11-19T11:51:48.164101249Z ==> Detected service running on port 10000
+2025-11-19T11:51:48.30566468Z ==> Docs on specifying a port: https://render.com/docs/web-services#port-binding

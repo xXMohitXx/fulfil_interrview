@@ -18,19 +18,16 @@ class Config:
         elif DATABASE_URL.startswith('postgresql://'):
             DATABASE_URL = DATABASE_URL.replace('postgresql://', 'postgresql+pg8000://')
         
-        # Add SSL mode for Supabase connection
-        if 'sslmode=' not in DATABASE_URL:
+        # Add SSL configuration for pg8000 driver (uses different parameter name)
+        if 'ssl_context=' not in DATABASE_URL:
             separator = '&' if '?' in DATABASE_URL else '?'
-            DATABASE_URL += f'{separator}sslmode=require'
+            DATABASE_URL += f'{separator}ssl_context=true'
     
     SQLALCHEMY_DATABASE_URI = DATABASE_URL
     SQLALCHEMY_ENGINE_OPTIONS = {
         'pool_pre_ping': True,
         'pool_recycle': 300,
-        'connect_args': {
-            'sslmode': 'require',
-            'connect_timeout': 30
-        }
+        'pool_timeout': 30
     }
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     
