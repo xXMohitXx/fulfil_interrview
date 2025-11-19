@@ -3,7 +3,7 @@ services:
     name: acme-product-import-web
     env: python
     buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn app:app --bind 0.0.0.0:$PORT --workers 2 --timeout 120
+    startCommand: gunicorn app:app --bind 0.0.0.0:$PORT --workers 2 --timeout 120 --worker-class eventlet
     plan: free
     envVars:
       - key: FLASK_ENV
@@ -17,13 +17,16 @@ services:
       - key: DATABASE_URL
         sync: false
       - key: REDIS_URL
-        sync: false
+        fromService:
+          type: redis
+          name: acme-redis
+          property: connectionString
 
   - type: worker
     name: acme-product-import-worker
     env: python
     buildCommand: pip install -r requirements.txt
-    startCommand: celery -A app.celery worker --loglevel=info --concurrency=2
+    startCommand: celery -A app.celery worker --loglevel=info --concurrency=1 --pool=solo
     plan: free
     envVars:
       - key: FLASK_ENV
@@ -37,7 +40,10 @@ services:
       - key: DATABASE_URL
         sync: false
       - key: REDIS_URL
-        sync: false
+        fromService:
+          type: redis
+          name: acme-redis
+          property: connectionString
 
 databases:
   - name: acme-redis

@@ -753,18 +753,27 @@
         function loadWebhooks() {
             fetch('/api/webhooks')
             .then(response => response.json())
-            .then(webhooks => {
-                displayWebhooks(webhooks);
+            .then(data => {
+                // Fix: Handle both array and object responses
+                if (data.error) {
+                    showAlert('Error loading webhooks: ' + data.error, 'danger');
+                    displayWebhooks([]);
+                } else {
+                    displayWebhooks(Array.isArray(data) ? data : []);
+                }
             })
             .catch(error => {
-                showAlert(error.message, 'danger');
+                console.error('Webhook load error:', error);
+                showAlert('Error loading webhooks: ' + error.message, 'danger');
+                displayWebhooks([]);
             });
         }
 
         function displayWebhooks(webhooks) {
             const tbody = document.getElementById('webhooksTableBody');
             
-            if (webhooks.length === 0) {
+            // Fix: Check if webhooks exists and is array
+            if (!webhooks || !Array.isArray(webhooks) || webhooks.length === 0) {
                 tbody.innerHTML = '<tr><td colspan="6" class="text-center">No webhooks configured</td></tr>';
                 return;
             }
