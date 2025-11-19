@@ -9,7 +9,7 @@ echo "=== Upgrading pip ==="
 python -m pip install --upgrade pip
 
 echo "=== Installing dependencies ==="
-pip install --no-cache-dir -r requirements.txt
+pip install --no-cache-dir -r requirements-prod.txt
 
 echo "=== Verifying psycopg2 installation ==="
 python -c "import psycopg2; print('psycopg2 imported successfully')"
