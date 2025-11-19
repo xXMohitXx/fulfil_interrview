@@ -16,7 +16,7 @@
    - Repository: `xXMohitXx/fulfil_interrview`
    - Name: `product-management-app`
    - Build Command: `pip install -r requirements.txt` 
-   - Start Command: `python app.py`
+   - Start Command: `gunicorn app:app --bind 0.0.0.0:$PORT`
 
 4. **Environment Variables**:
    ```
