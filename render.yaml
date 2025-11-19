@@ -9,13 +9,13 @@ services:
       - key: FLASK_ENV
         value: production
       - key: FLASK_SECRET_KEY
-        generateValue: true
+        value: zAkeQKH+Hb/Xc1aK32PmSgLiwf5P9IBCm0HibZRjUr8=
       - key: SUPABASE_URL
-        sync: false
+        value: https://bhyrldeuwxmtaebjpcmu.supabase.co
       - key: SUPABASE_KEY
-        sync: false
+        value: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJoeXJsZGV1d3htdGFlYmpwY211Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjM1NDYyNjcsImV4cCI6MjA3OTEyMjI2N30.KBqsUxIBuM_SwmKB42q6z71UYMexe3rrnA06KjI3610
       - key: DATABASE_URL
-        sync: false
+        value: postgresql+psycopg2://postgres:yQssSttRghFbuthG@db.bhyrldeuwxmtaebjpcmu.supabase.co:5432/postgres?sslmode=require
       - key: REDIS_URL
         fromService:
           type: redis
@@ -32,13 +32,13 @@ services:
       - key: FLASK_ENV
         value: production
       - key: FLASK_SECRET_KEY
-        sync: false
+        value: zAkeQKH+Hb/Xc1aK32PmSgLiwf5P9IBCm0HibZRjUr8=
       - key: SUPABASE_URL
-        sync: false
+        value: https://bhyrldeuwxmtaebjpcmu.supabase.co
       - key: SUPABASE_KEY
-        sync: false
+        value: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJoeXJsZGV1d3htdGFlYmpwY211Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjM1NDYyNjcsImV4cCI6MjA3OTEyMjI2N30.KBqsUxIBuM_SwmKB42q6z71UYMexe3rrnA06KjI3610
       - key: DATABASE_URL
-        sync: false
+        value: postgresql+psycopg2://postgres:yQssSttRghFbuthG@db.bhyrldeuwxmtaebjpcmu.supabase.co:5432/postgres?sslmode=require
       - key: REDIS_URL
         fromService:
           type: redis
