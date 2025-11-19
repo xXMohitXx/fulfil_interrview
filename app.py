@@ -8,6 +8,13 @@ from datetime import datetime
 from config import Config
 from models import db, Product, Webhook, UploadLog
 
+# Force IPv4 to avoid Supabase IPv6 network issues on Render
+import socket
+_orig_getaddrinfo = socket.getaddrinfo
+def _force_ipv4(host, port, family=0, type=0, proto=0, flags=0):
+    return _orig_getaddrinfo(host, port, socket.AF_INET, type, proto, flags)
+socket.getaddrinfo = _force_ipv4
+
 def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)

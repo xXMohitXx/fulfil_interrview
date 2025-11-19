@@ -10,15 +10,11 @@ class Config:
     SUPABASE_URL = os.environ.get('SUPABASE_URL')
     SUPABASE_KEY = os.environ.get('SUPABASE_KEY')
     
-    # Database Configuration - Simple psycopg2 approach
+    # Database Configuration - Use the URL as-is if it includes driver
     DATABASE_URL = os.environ.get('DATABASE_URL')
     
     if DATABASE_URL:
-        # Simple postgresql format
-        if DATABASE_URL.startswith('postgres://'):
-            SQLALCHEMY_DATABASE_URI = DATABASE_URL.replace('postgres://', 'postgresql://')
-        else:
-            SQLALCHEMY_DATABASE_URI = DATABASE_URL
+        SQLALCHEMY_DATABASE_URI = DATABASE_URL
     else:
         SQLALCHEMY_DATABASE_URI = 'sqlite:///products.db'
     
