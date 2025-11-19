@@ -334,7 +334,7 @@ def test_webhook(webhook_id):
 @celery.task
 def process_csv_file(filepath, filename):
     """Background task to process CSV file"""
-    import pandas as pd
+    import csv
     import uuid
     
     task_id = process_csv_file.request.id
@@ -349,19 +349,41 @@ def process_csv_file(filepath, filename):
         db.session.add(upload_log)
         db.session.commit()
         
-        # Read CSV file
-        df = pd.read_csv(filepath)
-        total_rows = len(df)
+        # Read CSV file to count total rows first
+        with open(filepath, 'r', encoding='utf-8', errors='ignore') as csvfile:
+            # Detect delimiter
+            sample = csvfile.read(1024)
+            csvfile.seek(0)
+            sniffer = csv.Sniffer()
+            delimiter = sniffer.sniff(sample).delimiter
+            
+            # Count total rows
+            reader = csv.reader(csvfile, delimiter=delimiter)
+            rows = list(reader)
+            total_rows = len(rows) - 1  # Subtract header row
+        
+        if total_rows <= 0:
+            raise Exception("No data rows found in CSV file")
         
         # Update total rows count
         upload_log.total_rows = total_rows
         db.session.commit()
         
         # Validate required columns
+        header_row = rows[0]
         required_columns = ['name', 'sku', 'description']
-        missing_columns = [col for col in required_columns if col not in df.columns]
-        if missing_columns:
-            raise Exception(f"Missing required columns: {missing_columns}")
+        
+        # Create case-insensitive column mapping
+        column_mapping = {}
+        for required_col in required_columns:
+            found = False
+            for i, header in enumerate(header_row):
+                if header.lower().strip() == required_col.lower():
+                    column_mapping[required_col] = i
+                    found = True
+                    break
+            if not found:
+                raise Exception(f"Missing required column: {required_col}")
         
         # Process rows in batches
         batch_size = 1000
@@ -370,15 +392,16 @@ def process_csv_file(filepath, filename):
         error_count = 0
         errors = []
         
-        for i in range(0, total_rows, batch_size):
-            batch = df.iloc[i:i+batch_size]
+        for i in range(1, len(rows), batch_size):  # Start from 1 to skip header
+            batch_end = min(i + batch_size, len(rows))
+            batch = rows[i:batch_end]
             
-            for index, row in batch.iterrows():
+            for row_index, row in enumerate(batch, start=i):
                 try:
-                    # Clean and validate data
-                    name = str(row['name']).strip()
-                    sku = str(row['sku']).strip()
-                    description = str(row['description']).strip() if pd.notna(row['description']) else ''
+                    # Extract data using column mapping
+                    name = row[column_mapping['name']].strip() if column_mapping['name'] < len(row) else ''
+                    sku = row[column_mapping['sku']].strip() if column_mapping['sku'] < len(row) else ''
+                    description = row[column_mapping['description']].strip() if column_mapping['description'] < len(row) else ''
                     
                     if not name or not sku:
                         raise Exception("Name and SKU are required")
@@ -405,7 +428,7 @@ def process_csv_file(filepath, filename):
                     
                 except Exception as e:
                     error_count += 1
-                    errors.append(f"Row {index + 2}: {str(e)}")
+                    errors.append(f"Row {row_index + 1}: {str(e)}")
                 
                 processed_rows += 1
                 
