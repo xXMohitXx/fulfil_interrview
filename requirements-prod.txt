@@ -1,9 +1,14 @@
-# For production deployment (IPv4 forced for Render compatibility)
+# Core Flask dependencies
 Flask==2.3.3
 Flask-SQLAlchemy==3.0.5
 Flask-CORS==4.0.0
+
+# Database connectivity  
 psycopg2-binary>=2.9.5
+
+# Additional dependencies
 requests==2.31.0
 python-dotenv==1.0.0
+
+# Production server
 gunicorn==21.2.0
-dnspython==2.4.2

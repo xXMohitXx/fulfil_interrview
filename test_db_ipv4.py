@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """
 Test database connection with forced IPv4 resolution for Render deployment
+Uses socket module only - no external dependencies required
 """
 import os
 import sys
@@ -17,10 +18,10 @@ def test_database_connection():
         print("❌ DATABASE_URL not found in environment variables")
         return False
     
-    print(f"🔍 Testing database connection with IPv4 resolution...")
+    print(f"🔍 Testing database connection with socket-based IPv4 resolution...")
     print(f"📍 Original DATABASE_URL: {DATABASE_URL[:50]}...")
     
-    # Resolve to IPv4
+    # Resolve to IPv4 using socket (no dnspython needed)
     ipv4_url = resolve_ipv4_database_url(DATABASE_URL)
     print(f"🌐 IPv4 resolved URL: {ipv4_url[:50]}...")
     
@@ -44,7 +45,7 @@ def test_database_connection():
             conn = psycopg2.connect(
                 ipv4_url,
                 connect_timeout=10,
-                application_name='render_ipv4_test'
+                application_name='render_socket_ipv4_test'
             )
             
             # Test query
@@ -54,8 +55,8 @@ def test_database_connection():
             cursor.close()
             conn.close()
             
-            print(f"✅ Database connection successful with IPv4!")
-            print(f"📊 PostgreSQL version: {version[0][:50]}...")
+            print(f"✅ Database connection successful with socket IPv4 resolution!")
+            print(f"📊 PostgreSQL version: {version[0][:70]}...")
             return True
             
         except Exception as e:
@@ -64,13 +65,13 @@ def test_database_connection():
                 print(f"⏳ Waiting 2 seconds before retry...")
                 time.sleep(2)
             else:
-                print(f"💥 All IPv4 connection attempts failed!")
+                print(f"💥 All socket IPv4 connection attempts failed!")
                 return False
     
     return False
 
 if __name__ == "__main__":
-    print("🧪 IPv4 Database Connection Test")
-    print("=" * 60)
+    print("🧪 Socket-based IPv4 Database Connection Test")
+    print("=" * 65)
     success = test_database_connection()
     sys.exit(0 if success else 1)

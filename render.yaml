@@ -2,8 +2,9 @@ services:
   - type: web
     name: product-management-app
     env: python
-    buildCommand: chmod +x build.sh && ./build.sh
-    startCommand: gunicorn app:app --bind 0.0.0.0:$PORT --timeout 120 --workers 2
+    runtime: python-3.11.10
+    buildCommand: pip install --upgrade pip && pip install -r requirements-prod.txt
+    startCommand: gunicorn app:app --bind 0.0.0.0:$PORT --timeout 120 --workers 2 --log-level info
     envVars:
       - key: DATABASE_URL
         value: postgresql://postgres:yQssSttRghFbuthG@db.bhyrldeuwxmtaebjpcmu.supabase.co:5432/postgres?sslmode=require
@@ -11,5 +12,5 @@ services:
         generateValue: true
       - key: FLASK_ENV
         value: production
-      - key: PORT
-        value: 10000
+      - key: PYTHONUNBUFFERED
+        value: "1"
