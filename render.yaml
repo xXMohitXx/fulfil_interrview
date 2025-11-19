@@ -6,8 +6,21 @@ services:
     buildCommand: pip install --upgrade pip && pip install -r requirements-prod.txt
     startCommand: gunicorn app:app --bind 0.0.0.0:$PORT --timeout 120 --workers 2 --log-level info
     envVars:
+      # Database Configuration - Original connection string
       - key: DATABASE_URL
         value: postgresql://postgres:yQssSttRghFbuthG@db.bhyrldeuwxmtaebjpcmu.supabase.co:5432/postgres?sslmode=require
+      
+      # Force IPv4 resolution preference
+      - key: PREFER_IPV4
+        value: "1"
+      
+      # Supabase Configuration
+      - key: SUPABASE_URL
+        value: https://bhyrldeuwxmtaebjpcmu.supabase.co
+      - key: SUPABASE_KEY
+        value: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJoeXJsZGV1d3htdGFlYmpwY211Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjM1NDYyNjcsImV4cCI6MjA3OTEyMjI2N30.KBqsUxIBuM_SwmKB42q6z71UYMexe3rrnA06KjI3610
+      
+      # Application Configuration
       - key: SECRET_KEY
         generateValue: true
       - key: FLASK_ENV

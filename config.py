@@ -1,32 +1,35 @@
 import os
 from dotenv import load_dotenv
-from db_resolver import resolve_ipv4_database_url
+from urllib.parse import urlparse
+from ipv6_workaround import apply_ipv6_workaround, get_alternative_database_url
 
 load_dotenv()
 
 class Config:
-    SECRET_KEY = os.environ.get('FLASK_SECRET_KEY') or 'dev-secret-key'
+    SECRET_KEY = os.environ.get('SECRET_KEY') or 'dev-secret-key'
     
     # Supabase Configuration
     SUPABASE_URL = os.environ.get('SUPABASE_URL')
     SUPABASE_KEY = os.environ.get('SUPABASE_KEY')
     
-    # Database Configuration - Force IPv4 for Render + Supabase
-    DATABASE_URL = os.environ.get('DATABASE_URL')
+    # Apply IPv6 workaround for Render deployment
+    apply_ipv6_workaround()
+    
+    # Database Configuration - Use alternative URL if available
+    DATABASE_URL = get_alternative_database_url() or os.environ.get('DATABASE_URL')
     
     if DATABASE_URL:
-        # Resolve to IPv4 to avoid Render IPv6 routing issues
-        resolved_url = resolve_ipv4_database_url(DATABASE_URL)
+        # Parse the original URL to extract components
+        parsed = urlparse(DATABASE_URL)
         
-        # Ensure proper connection parameters for Supabase compatibility
-        if 'supabase.co' in resolved_url:
-            # Add connection parameters for Supabase compatibility
-            if '?' in resolved_url:
-                SQLALCHEMY_DATABASE_URI = resolved_url + '&connect_timeout=10&application_name=render_app_ipv4'
-            else:
-                SQLALCHEMY_DATABASE_URI = resolved_url + '?sslmode=require&connect_timeout=10&application_name=render_app_ipv4'
+        # Check if this is a Supabase connection that needs IPv4 forcing
+        if 'supabase.co' in DATABASE_URL:
+            print("🔄 Detected Supabase database - using IPv6 workaround connection")
+            
+            # Use the modified URL with additional parameters
+            SQLALCHEMY_DATABASE_URI = DATABASE_URL
         else:
-            SQLALCHEMY_DATABASE_URI = resolved_url
+            SQLALCHEMY_DATABASE_URI = DATABASE_URL
     else:
         SQLALCHEMY_DATABASE_URI = 'sqlite:///products.db'
     
@@ -38,7 +41,10 @@ class Config:
         'pool_pre_ping': True,
         'connect_args': {
             'connect_timeout': 10,
-            'application_name': 'render_flask_app'
+            'application_name': 'render_flask_app',
+            # Force IPv4 connection to avoid Render IPv6 routing issues
+            'host': 'db.bhyrldeuwxmtaebjpcmu.supabase.co',
+            'options': '-c default_transaction_isolation=read_committed'
         }
     }
     
