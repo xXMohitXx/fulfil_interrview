@@ -13,7 +13,9 @@ class Config:
     # Database Configuration (Supabase PostgreSQL)
     DATABASE_URL = os.environ.get('DATABASE_URL')
     if DATABASE_URL and DATABASE_URL.startswith('postgres://'):
-        DATABASE_URL = DATABASE_URL.replace('postgres://', 'postgresql://')
+        DATABASE_URL = DATABASE_URL.replace('postgres://', 'postgresql+pg8000://')
+    elif DATABASE_URL and DATABASE_URL.startswith('postgresql://'):
+        DATABASE_URL = DATABASE_URL.replace('postgresql://', 'postgresql+pg8000://')
     SQLALCHEMY_DATABASE_URI = DATABASE_URL
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     
