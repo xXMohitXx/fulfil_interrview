@@ -1,7 +1,7 @@
 Flask==2.3.3
-Flask-SQLAlchemy==2.5.1
+Flask-SQLAlchemy==3.0.5
 Flask-CORS==4.0.0
-SQLAlchemy==1.4.53
+SQLAlchemy==2.0.25
 psycopg[binary]==3.2.12
 celery==5.2.7
 redis==4.5.5
@@ -12,4 +12,4 @@ werkzeug==2.3.7
 eventlet==0.33.3
 flask-socketio==5.3.6
 python-socketio==5.8.0
-importlib-metadata==4.13.0
+importlib-metadata==4.8.3

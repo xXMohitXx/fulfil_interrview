@@ -22,10 +22,6 @@ class Config:
     else:
         SQLALCHEMY_DATABASE_URI = 'sqlite:///products.db'
     
-    SQLALCHEMY_ENGINE_OPTIONS = {
-        'pool_pre_ping': True,
-        'pool_recycle': 300
-    }
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     
     # Redis Configuration
