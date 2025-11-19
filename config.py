@@ -10,29 +10,22 @@ class Config:
     SUPABASE_URL = os.environ.get('SUPABASE_URL')
     SUPABASE_KEY = os.environ.get('SUPABASE_KEY')
     
-    # Database Configuration - pg8000 for Python 3.13 compatibility
+    # Database Configuration - Simple approach for maximum compatibility
     DATABASE_URL = os.environ.get('DATABASE_URL')
     
     if DATABASE_URL:
-        # Convert to pg8000 format for Python 3.13 compatibility
+        # Keep it simple - just use postgresql://
         if DATABASE_URL.startswith('postgres://'):
-            SQLALCHEMY_DATABASE_URI = DATABASE_URL.replace('postgres://', 'postgresql+pg8000://')
-        elif DATABASE_URL.startswith('postgresql://'):
-            SQLALCHEMY_DATABASE_URI = DATABASE_URL.replace('postgresql://', 'postgresql+pg8000://')
+            SQLALCHEMY_DATABASE_URI = DATABASE_URL.replace('postgres://', 'postgresql://')
         else:
             SQLALCHEMY_DATABASE_URI = DATABASE_URL
-        
-        # Add SSL for pg8000 (uses different parameter name)
-        if 'ssl_context=' not in SQLALCHEMY_DATABASE_URI:
-            separator = '&' if '?' in SQLALCHEMY_DATABASE_URI else '?'
-            SQLALCHEMY_DATABASE_URI += f'{separator}ssl_context=true'
     else:
         SQLALCHEMY_DATABASE_URI = 'sqlite:///products.db'
     
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     
-    # Redis Configuration
-    REDIS_URL = os.environ.get('REDIS_URL') or 'redis://localhost:6379/0'
+    # Redis Configuration - Use Render's Redis service
+    REDIS_URL = os.environ.get('REDIS_URL') or os.environ.get('REDISCLOUD_URL') or 'redis://red-ct3f31rv2p9s73e63rig:6379'
     
     # Celery Configuration
     CELERY_BROKER_URL = REDIS_URL
