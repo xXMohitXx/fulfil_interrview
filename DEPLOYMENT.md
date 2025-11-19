@@ -15,7 +15,7 @@
 
 3. **Test Connection (Optional)**
    ```bash
-   python -c "from config import Config; from models import db; from app_simple import app; app.app_context().push(); db.create_all(); print('✅ Database connection successful')"
+   python -c "from config import Config; from models import db; from app import app; app.app_context().push(); db.create_all(); print('✅ Database connection successful')"
    ```
 
 ## Render Deployment
@@ -39,7 +39,7 @@
    - **Name**: `product-management-app`
    - **Environment**: `Python 3`
    - **Build Command**: `pip install -r requirements.txt`
-   - **Start Command**: `python app_simple.py`
+   - **Start Command**: `python app.py`
 
 4. **Environment Variables**
    Set these in Render dashboard:

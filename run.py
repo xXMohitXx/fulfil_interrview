@@ -4,7 +4,7 @@ Main application runner
 Run this file to start the Flask application locally
 """
 import os
-from app_simple import app
+from app import app
 
 if __name__ == '__main__':
     # Force local development settings

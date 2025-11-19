@@ -16,7 +16,7 @@
    - Repository: `xXMohitXx/fulfil_interrview`
    - Name: `product-management-app`
    - Build Command: `pip install -r requirements.txt` 
-   - Start Command: `python app_simple.py`
+   - Start Command: `python app.py`
 
 4. **Environment Variables**:
    ```

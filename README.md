@@ -51,7 +51,7 @@ The application will be available at `http://localhost:5000`
 
 ```
 ├── run.py                    # Main application runner
-├── app_simple.py            # Flask application with routes
+├── app.py                   # Flask application with routes
 ├── models.py                # Database models
 ├── config.py                # Configuration settings
 ├── reset_db.py              # Database initialization

@@ -3,7 +3,7 @@
 Database reset and initialization script
 This script will drop all tables and recreate them with the correct schema
 """
-from app_simple import app
+from app import app
 from models import db
 
 def reset_database():

@@ -3,7 +3,7 @@
 Demo webhook creation script
 Creates sample webhooks for testing the webhook functionality
 """
-from app_simple import app
+from app import app
 from models import db, Webhook
 
 def create_demo_webhooks():
