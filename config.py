@@ -22,10 +22,10 @@ class Config:
         else:
             SQLALCHEMY_DATABASE_URI = DATABASE_URL
         
-        # Add SSL for pg8000
-        if 'sslmode=' not in SQLALCHEMY_DATABASE_URI:
+        # Add SSL for pg8000 (uses different parameter name)
+        if 'ssl_context=' not in SQLALCHEMY_DATABASE_URI:
             separator = '&' if '?' in SQLALCHEMY_DATABASE_URI else '?'
-            SQLALCHEMY_DATABASE_URI += f'{separator}sslmode=require'
+            SQLALCHEMY_DATABASE_URI += f'{separator}ssl_context=true'
     else:
         SQLALCHEMY_DATABASE_URI = 'sqlite:///products.db'
     
