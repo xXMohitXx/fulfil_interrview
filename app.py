@@ -12,8 +12,15 @@ def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
     
-    # Initialize extensions
+    # Initialize extensions with engine options
     db.init_app(app)
+    
+    # Configure database engine options for Supabase
+    with app.app_context():
+        engine_options = getattr(app.config, 'SQLALCHEMY_ENGINE_OPTIONS', {})
+        if engine_options:
+            db.engine = db.get_engine(options=engine_options)
+    
     CORS(app)
     
     # Create upload folder

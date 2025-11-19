@@ -12,11 +12,26 @@ class Config:
     
     # Database Configuration (Supabase PostgreSQL)
     DATABASE_URL = os.environ.get('DATABASE_URL')
-    if DATABASE_URL and DATABASE_URL.startswith('postgres://'):
-        DATABASE_URL = DATABASE_URL.replace('postgres://', 'postgresql+pg8000://')
-    elif DATABASE_URL and DATABASE_URL.startswith('postgresql://'):
-        DATABASE_URL = DATABASE_URL.replace('postgresql://', 'postgresql+pg8000://')
+    if DATABASE_URL:
+        if DATABASE_URL.startswith('postgres://'):
+            DATABASE_URL = DATABASE_URL.replace('postgres://', 'postgresql+pg8000://')
+        elif DATABASE_URL.startswith('postgresql://'):
+            DATABASE_URL = DATABASE_URL.replace('postgresql://', 'postgresql+pg8000://')
+        
+        # Add SSL mode for Supabase connection
+        if 'sslmode=' not in DATABASE_URL:
+            separator = '&' if '?' in DATABASE_URL else '?'
+            DATABASE_URL += f'{separator}sslmode=require'
+    
     SQLALCHEMY_DATABASE_URI = DATABASE_URL
+    SQLALCHEMY_ENGINE_OPTIONS = {
+        'pool_pre_ping': True,
+        'pool_recycle': 300,
+        'connect_args': {
+            'sslmode': 'require',
+            'connect_timeout': 30
+        }
+    }
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     
     # Redis Configuration
