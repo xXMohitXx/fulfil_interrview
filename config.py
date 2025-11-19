@@ -1,5 +1,6 @@
 import os
 from dotenv import load_dotenv
+from db_resolver import resolve_ipv4_database_url
 
 load_dotenv()
 
@@ -10,19 +11,22 @@ class Config:
     SUPABASE_URL = os.environ.get('SUPABASE_URL')
     SUPABASE_KEY = os.environ.get('SUPABASE_KEY')
     
-    # Database Configuration - Optimized for Render + Supabase
+    # Database Configuration - Force IPv4 for Render + Supabase
     DATABASE_URL = os.environ.get('DATABASE_URL')
     
     if DATABASE_URL:
-        # Ensure proper connection parameters for Render + Supabase
-        if 'supabase.co' in DATABASE_URL:
+        # Resolve to IPv4 to avoid Render IPv6 routing issues
+        resolved_url = resolve_ipv4_database_url(DATABASE_URL)
+        
+        # Ensure proper connection parameters for Supabase compatibility
+        if 'supabase.co' in resolved_url:
             # Add connection parameters for Supabase compatibility
-            if '?' in DATABASE_URL:
-                SQLALCHEMY_DATABASE_URI = DATABASE_URL + '&connect_timeout=10&application_name=render_app'
+            if '?' in resolved_url:
+                SQLALCHEMY_DATABASE_URI = resolved_url + '&connect_timeout=10&application_name=render_app_ipv4'
             else:
-                SQLALCHEMY_DATABASE_URI = DATABASE_URL + '?sslmode=require&connect_timeout=10&application_name=render_app'
+                SQLALCHEMY_DATABASE_URI = resolved_url + '?sslmode=require&connect_timeout=10&application_name=render_app_ipv4'
         else:
-            SQLALCHEMY_DATABASE_URI = DATABASE_URL
+            SQLALCHEMY_DATABASE_URI = resolved_url
     else:
         SQLALCHEMY_DATABASE_URI = 'sqlite:///products.db'
     

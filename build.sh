@@ -14,7 +14,7 @@ pip install --no-cache-dir -r requirements-prod.txt
 echo "=== Verifying psycopg2 installation ==="
 python -c "import psycopg2; print('✅ psycopg2 imported successfully')"
 
-echo "=== Testing database connection ==="
-python test_db.py
+echo "=== Testing IPv4 database connection ==="
+python test_db_ipv4.py
 
 echo "=== Build completed ==="
