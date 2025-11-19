@@ -3,10 +3,10 @@ services:
     name: product-management-app
     env: python
     buildCommand: chmod +x build.sh && ./build.sh
-    startCommand: gunicorn app:app --bind 0.0.0.0:$PORT
+    startCommand: gunicorn app:app --bind 0.0.0.0:$PORT --timeout 120 --workers 2
     envVars:
       - key: DATABASE_URL
-        sync: false
+        value: postgresql://postgres:yQssSttRghFbuthG@db.bhyrldeuwxmtaebjpcmu.supabase.co:5432/postgres?sslmode=require
       - key: SECRET_KEY
         generateValue: true
       - key: FLASK_ENV

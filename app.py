@@ -13,14 +13,27 @@ def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
     
-    # Initialize extensions
+    # Initialize extensions with engine options
     db.init_app(app)
     
     # Simple database initialization without Redis dependency
     with app.app_context():
         try:
-            db.create_all()
-            print("Database tables created successfully")
+            # Test database connection with retry
+            max_retries = 3
+            for attempt in range(max_retries):
+                try:
+                    db.create_all()
+                    print("Database tables created successfully")
+                    break
+                except Exception as e:
+                    if attempt < max_retries - 1:
+                        print(f"Database connection attempt {attempt + 1} failed, retrying...")
+                        import time
+                        time.sleep(2)
+                    else:
+                        print(f"Database initialization error: {e}")
+                        # Continue anyway for local development
         except Exception as e:
             print(f"Database initialization error: {e}")
     

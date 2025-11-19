@@ -10,13 +10,33 @@ class Config:
     SUPABASE_URL = os.environ.get('SUPABASE_URL')
     SUPABASE_KEY = os.environ.get('SUPABASE_KEY')
     
-    # Database Configuration - Use the URL as-is if it includes driver
+    # Database Configuration - Optimized for Render + Supabase
     DATABASE_URL = os.environ.get('DATABASE_URL')
     
     if DATABASE_URL:
-        SQLALCHEMY_DATABASE_URI = DATABASE_URL
+        # Ensure proper connection parameters for Render + Supabase
+        if 'supabase.co' in DATABASE_URL:
+            # Add connection parameters for Supabase compatibility
+            if '?' in DATABASE_URL:
+                SQLALCHEMY_DATABASE_URI = DATABASE_URL + '&connect_timeout=10&application_name=render_app'
+            else:
+                SQLALCHEMY_DATABASE_URI = DATABASE_URL + '?sslmode=require&connect_timeout=10&application_name=render_app'
+        else:
+            SQLALCHEMY_DATABASE_URI = DATABASE_URL
     else:
         SQLALCHEMY_DATABASE_URI = 'sqlite:///products.db'
+    
+    # SQLAlchemy configuration for better connection handling
+    SQLALCHEMY_ENGINE_OPTIONS = {
+        'pool_size': 5,
+        'pool_timeout': 20,
+        'pool_recycle': 300,
+        'pool_pre_ping': True,
+        'connect_args': {
+            'connect_timeout': 10,
+            'application_name': 'render_flask_app'
+        }
+    }
     
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     

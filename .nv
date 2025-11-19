@@ -1,0 +1,1 @@
+DATABASE_URL=postgresql+psycopg2://postgres:yQssSttRghFbuthG@db.bhyrldeuwxmtaebjpcmu.supabase.co:5432/postgres?sslmode=require
