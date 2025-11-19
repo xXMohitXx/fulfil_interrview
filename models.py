@@ -11,7 +11,6 @@ class Product(db.Model):
     name = db.Column(db.String(255), nullable=False)
     sku = db.Column(db.String(100), unique=True, nullable=False, index=True)
     description = db.Column(db.Text)
-    active = db.Column(db.Boolean, default=True, nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     
@@ -19,7 +18,6 @@ class Product(db.Model):
     __table_args__ = (
         Index('idx_products_sku_lower', db.func.lower(sku)),
         Index('idx_products_name', name),
-        Index('idx_products_active', active),
     )
     
     def to_dict(self):
@@ -28,7 +26,6 @@ class Product(db.Model):
             'name': self.name,
             'sku': self.sku,
             'description': self.description,
-            'active': self.active,
             'created_at': self.created_at.isoformat() if self.created_at else None,
             'updated_at': self.updated_at.isoformat() if self.updated_at else None
         }

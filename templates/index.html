@@ -24,6 +24,20 @@
             border-color: #0d6efd;
             background-color: #e7f1ff;
         }
+        .upload-zone {
+            border: 2px dashed #007bff !important;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .upload-zone:hover {
+            border-color: #28a745 !important;
+            background-color: #f8f9fa;
+            transform: scale(1.01);
+        }
         .progress-container {
             display: none;
             margin-top: 1rem;
@@ -92,14 +106,19 @@
                         </h5>
                     </div>
                     <div class="card-body">
-                        <div class="upload-zone" id="uploadZone">
-                            <i class="fas fa-cloud-upload-alt fa-3x text-muted mb-3"></i>
-                            <h5 class="text-muted">Drop CSV file here or click to select</h5>
-                            <p class="text-muted mb-0">Maximum file size: 500MB | Supported format: CSV</p>
-                            <input type="file" id="fileInput" class="d-none" accept=".csv">
+                        <!-- File Upload Zone -->
+                        <div class="upload-zone border-2 border-dashed border-primary rounded p-4 text-center mb-3" 
+                             style="min-height: 150px; cursor: pointer; transition: all 0.3s ease;" id="uploadZone">
+                            <div class="upload-content">
+                                <i class="fas fa-cloud-upload-alt fa-3x text-primary mb-3" id="uploadIcon"></i>
+                                <h5 class="mb-2">Drop CSV file here or click to browse</h5>
+                                <p class="text-muted mb-2">Maximum file size: 500MB | Supported format: CSV</p>
+                                <p class="text-info mb-0"><small><i class="fas fa-info-circle"></i> Supports up to 500,000 products with real-time progress</small></p>
+                            </div>
+                            <input type="file" id="fileInput" accept=".csv" style="display: none;">
                         </div>
                         
-                        <div class="progress-container" id="progressContainer">
+                        <div class="progress-container" id="progressContainer" style="display: none;">
                             <div class="d-flex justify-content-between align-items-center mb-2">
                                 <span id="progressText">Processing...</span>
                                 <span id="progressPercent">0%</span>
@@ -135,7 +154,7 @@
                     <div class="card-body">
                         <!-- Search and Filters -->
                         <div class="row mb-3">
-                            <div class="col-md-6">
+                            <div class="col-md-8">
                                 <div class="input-group">
                                     <span class="input-group-text">
                                         <i class="fas fa-search"></i>
@@ -144,14 +163,7 @@
                                            placeholder="Search by name, SKU, or description...">
                                 </div>
                             </div>
-                            <div class="col-md-3">
-                                <select class="form-select" id="activeFilter">
-                                    <option value="">All Products</option>
-                                    <option value="true">Active Only</option>
-                                    <option value="false">Inactive Only</option>
-                                </select>
-                            </div>
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                                 <button class="btn btn-outline-secondary w-100" onclick="loadProducts()">
                                     <i class="fas fa-sync me-1"></i>Refresh
                                 </button>
@@ -166,14 +178,13 @@
                                         <th>SKU</th>
                                         <th>Name</th>
                                         <th>Description</th>
-                                        <th>Status</th>
-                                        <th>Created</th>
+                                        <th>Updated</th>
                                         <th width="150">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody id="productsTableBody">
                                     <tr>
-                                        <td colspan="6" class="text-center">
+                                        <td colspan="5" class="text-center">
                                             <div class="spinner-border text-primary" role="status">
                                                 <span class="visually-hidden">Loading...</span>
                                             </div>
@@ -254,10 +265,6 @@
                         <div class="mb-3">
                             <label for="productDescription" class="form-label">Description</label>
                             <textarea class="form-control" id="productDescription" rows="3"></textarea>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="productActive" checked>
-                            <label class="form-check-label" for="productActive">Active</label>
                         </div>
                     </form>
                 </div>
@@ -385,17 +392,33 @@
 
         function handleDragOver(e) {
             e.preventDefault();
-            e.currentTarget.classList.add('dragover');
+            e.stopPropagation();
+            const uploadZone = e.currentTarget;
+            uploadZone.classList.add('border-success', 'bg-light');
+            uploadZone.style.transform = 'scale(1.02)';
+            const icon = uploadZone.querySelector('#uploadIcon');
+            if (icon) icon.classList.add('fa-bounce');
         }
 
         function handleDragLeave(e) {
             e.preventDefault();
-            e.currentTarget.classList.remove('dragover');
+            e.stopPropagation();
+            const uploadZone = e.currentTarget;
+            uploadZone.classList.remove('border-success', 'bg-light');
+            uploadZone.style.transform = 'scale(1)';
+            const icon = uploadZone.querySelector('#uploadIcon');
+            if (icon) icon.classList.remove('fa-bounce');
         }
 
         function handleDrop(e) {
             e.preventDefault();
-            e.currentTarget.classList.remove('dragover');
+            e.stopPropagation();
+            const uploadZone = e.currentTarget;
+            uploadZone.classList.remove('border-success', 'bg-light');
+            uploadZone.style.transform = 'scale(1)';
+            const icon = uploadZone.querySelector('#uploadIcon');
+            if (icon) icon.classList.remove('fa-bounce');
+            
             const files = e.dataTransfer.files;
             if (files.length > 0) {
                 uploadFile(files[0]);
@@ -415,30 +438,91 @@
                 return;
             }
 
+            // File size validation (500MB limit)
+            const maxSize = 500 * 1024 * 1024;
+            if (file.size > maxSize) {
+                showAlert(`File too large. Maximum size is 500MB.`, 'danger');
+                return;
+            }
+
             const formData = new FormData();
             formData.append('file', file);
 
-            // Show progress container
+            // Show progress
             document.getElementById('progressContainer').style.display = 'block';
             document.getElementById('uploadResult').innerHTML = '';
+            
+            const progressBar = document.getElementById('progressBar');
+            const progressPercent = document.getElementById('progressPercent');
+            const progressText = document.getElementById('progressText');
+            
+            progressText.textContent = 'Uploading...';
+            progressBar.style.width = '30%';
+            progressPercent.textContent = '30%';
 
             fetch('/upload', {
                 method: 'POST',
                 body: formData
             })
-            .then(response => response.json())
+            .then(response => {
+                progressBar.style.width = '70%';
+                progressPercent.textContent = '70%';
+                progressText.textContent = 'Processing...';
+                return response.json();
+            })
             .then(data => {
                 if (data.error) {
                     throw new Error(data.error);
                 }
-                
-                // Start polling for progress
-                pollUploadProgress(data.task_id);
+                showUploadComplete(data);
             })
             .catch(error => {
                 showAlert(error.message, 'danger');
                 document.getElementById('progressContainer').style.display = 'none';
             });
+        }
+
+        function showUploadComplete(data) {
+            const progressBar = document.getElementById('progressBar');
+            const progressPercent = document.getElementById('progressPercent');
+            const progressText = document.getElementById('progressText');
+            
+            // Show complete
+            progressBar.style.width = '100%';
+            progressBar.classList.remove('progress-bar-animated');
+            progressBar.classList.add('bg-success');
+            progressPercent.textContent = '100%';
+            progressText.textContent = 'Upload completed!';
+            
+            // Show results
+            const processedCount = data.processed_count || 0;
+            const errorCount = data.error_count || 0;
+            const updatedCount = data.updated_count || 0;
+            
+            document.getElementById('uploadResult').innerHTML = `
+                <div class="alert alert-success">
+                    <h6><i class="fas fa-check-circle me-2"></i>Upload Complete!</h6>
+                    <p>Processed: <strong>${processedCount}</strong> products</p>
+                    ${updatedCount > 0 ? `<p>Updated: <strong>${updatedCount}</strong> existing products</p>` : ''}
+                    ${errorCount > 0 ? `<p class="text-warning">Errors: <strong>${errorCount}</strong></p>` : ''}
+                    ${data.errors && data.errors.length > 0 ? `
+                        <details>
+                            <summary>View Errors</summary>
+                            <ul class="mt-2">
+                                ${data.errors.slice(0, 5).map(error => `<li>${error}</li>`).join('')}
+                            </ul>
+                        </details>
+                    ` : ''}
+                </div>
+            `;
+            
+            // Refresh products
+            loadProducts();
+            
+            // Hide progress after 3 seconds
+            setTimeout(() => {
+                document.getElementById('progressContainer').style.display = 'none';
+            }, 3000);
         }
 
         function pollUploadProgress(taskId) {
@@ -525,19 +609,14 @@
                 }, 500);
             });
 
-            document.getElementById('activeFilter').addEventListener('change', function() {
-                currentPage = 1;
-                loadProducts();
-            });
+
         }
 
         function loadProducts() {
             const search = document.getElementById('searchInput').value;
-            const activeFilter = document.getElementById('activeFilter').value;
             
             let url = `/api/products?page=${currentPage}&per_page=20`;
             if (search) url += `&search=${encodeURIComponent(search)}`;
-            if (activeFilter) url += `&active=${activeFilter}`;
 
             fetch(url)
             .then(response => response.json())
@@ -557,28 +636,23 @@
             const tbody = document.getElementById('productsTableBody');
             
             if (products.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="6" class="text-center">No products found</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="5" class="text-center">No products found</td></tr>';
                 return;
             }
 
             tbody.innerHTML = products.map(product => `
                 <tr>
                     <td><code>${product.sku}</code></td>
-                    <td>${product.name}</td>
+                    <td><strong>${product.name}</strong></td>
                     <td>${product.description || '<em>No description</em>'}</td>
-                    <td>
-                        <span class="badge ${product.active ? 'bg-success' : 'bg-secondary'}">
-                            ${product.active ? 'Active' : 'Inactive'}
-                        </span>
-                    </td>
-                    <td>${formatDate(product.created_at)}</td>
+                    <td>${formatDate(product.updated_at)}</td>
                     <td>
                         <button class="btn btn-sm btn-outline-primary me-1" 
-                                onclick="editProduct(${product.id})">
+                                onclick="editProduct(${product.id})" title="Edit Product">
                             <i class="fas fa-edit"></i>
                         </button>
                         <button class="btn btn-sm btn-outline-danger" 
-                                onclick="deleteProduct(${product.id})">
+                                onclick="deleteProduct(${product.id})" title="Delete Product">
                             <i class="fas fa-trash"></i>
                         </button>
                     </td>
@@ -640,7 +714,6 @@
             currentProductId = null;
             document.getElementById('productModalTitle').textContent = 'Add Product';
             document.getElementById('productForm').reset();
-            document.getElementById('productActive').checked = true;
             new bootstrap.Modal(document.getElementById('productModal')).show();
         }
 
@@ -648,22 +721,24 @@
             currentProductId = id;
             document.getElementById('productModalTitle').textContent = 'Edit Product';
             
-            // Find product in current table and populate form
-            const tbody = document.getElementById('productsTableBody');
-            const row = Array.from(tbody.querySelectorAll('tr')).find(tr => {
-                const editBtn = tr.querySelector('button[onclick*="editProduct"]');
-                return editBtn && editBtn.getAttribute('onclick').includes(id);
+            // Fetch product data from API
+            fetch(`/api/products?page=1&per_page=1000`)
+            .then(response => response.json())
+            .then(data => {
+                const product = data.products.find(p => p.id === id);
+                if (product) {
+                    document.getElementById('productSku').value = product.sku || '';
+                    document.getElementById('productName').value = product.name || '';
+                    document.getElementById('productDescription').value = product.description || '';
+                    
+                    new bootstrap.Modal(document.getElementById('productModal')).show();
+                } else {
+                    showAlert('Product not found', 'danger');
+                }
+            })
+            .catch(error => {
+                showAlert('Error loading product: ' + error.message, 'danger');
             });
-            
-            if (row) {
-                const cells = row.querySelectorAll('td');
-                document.getElementById('productSku').value = cells[0].querySelector('code').textContent;
-                document.getElementById('productName').value = cells[1].textContent;
-                document.getElementById('productDescription').value = cells[2].textContent === 'No description' ? '' : cells[2].textContent;
-                document.getElementById('productActive').checked = cells[3].querySelector('.badge').classList.contains('bg-success');
-            }
-            
-            new bootstrap.Modal(document.getElementById('productModal')).show();
         }
 
         function saveProduct() {
@@ -676,8 +751,7 @@
             const data = {
                 name: document.getElementById('productName').value,
                 sku: document.getElementById('productSku').value,
-                description: document.getElementById('productDescription').value,
-                active: document.getElementById('productActive').checked
+                description: document.getElementById('productDescription').value
             };
 
             const url = currentProductId ? `/api/products/${currentProductId}` : '/api/products';
@@ -731,7 +805,7 @@
         }
 
         function executeBulkDelete() {
-            fetch('/api/products/bulk', {
+            fetch('/api/products/bulk-delete', {
                 method: 'DELETE'
             })
             .then(response => response.json())
@@ -742,7 +816,7 @@
                 
                 bootstrap.Modal.getInstance(document.getElementById('bulkDeleteModal')).hide();
                 loadProducts();
-                showAlert(`Successfully deleted ${result.count} products!`, 'success');
+                showAlert(`Successfully deleted ${result.deleted_count} products!`, 'success');
             })
             .catch(error => {
                 showAlert(error.message, 'danger');
@@ -759,7 +833,8 @@
                     showAlert('Error loading webhooks: ' + data.error, 'danger');
                     displayWebhooks([]);
                 } else {
-                    displayWebhooks(Array.isArray(data) ? data : []);
+                    // Handle the correct API response format with {webhooks: [...]}
+                    displayWebhooks(data.webhooks || []);
                 }
             })
             .catch(error => {
