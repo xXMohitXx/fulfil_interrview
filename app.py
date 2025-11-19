@@ -12,38 +12,16 @@ def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
     
-    # Initialize extensions with connection fallback
+    # Initialize extensions
     db.init_app(app)
     
-    # Test database connection with fallback strategies
+    # Simple database initialization with error handling
     with app.app_context():
-        connection_successful = False
-        
-        # Strategy 1: Try psycopg2 first
         try:
             db.create_all()
-            db.session.execute('SELECT 1')
-            db.session.commit()
-            connection_successful = True
-            print("Database connected successfully with psycopg2")
+            print("Database tables created successfully")
         except Exception as e:
-            print(f"psycopg2 connection failed: {e}")
-            
-            # Strategy 2: Fallback to pg8000
-            try:
-                app.config['SQLALCHEMY_DATABASE_URI'] = app.config['SQLALCHEMY_DATABASE_URI_PG8000']
-                db.init_app(app)
-                db.create_all()
-                db.session.execute('SELECT 1')
-                db.session.commit()
-                connection_successful = True
-                print("Database connected successfully with pg8000")
-            except Exception as e2:
-                print(f"pg8000 connection also failed: {e2}")
-                print("WARNING: Database connection failed, app may not work properly")
-        
-        if not connection_successful:
-            print("CRITICAL: All database connection strategies failed")
+            print(f"Database initialization error (will retry on first request): {e}")
     
     CORS(app)
     
