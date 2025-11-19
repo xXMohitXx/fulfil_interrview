@@ -1,8 +1,8 @@
 Flask==2.3.3
-Flask-SQLAlchemy==3.0.5
+Flask-SQLAlchemy==2.5.1
 Flask-CORS==4.0.0
-SQLAlchemy==2.0.25
-psycopg[binary]==3.2.12
+SQLAlchemy==1.4.53
+psycopg2-binary==2.9.5
 celery==5.2.7
 redis==4.5.5
 requests==2.31.0
