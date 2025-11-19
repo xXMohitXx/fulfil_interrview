@@ -10,22 +10,15 @@ class Config:
     SUPABASE_URL = os.environ.get('SUPABASE_URL')
     SUPABASE_KEY = os.environ.get('SUPABASE_KEY')
     
-    # Database Configuration - Use psycopg3 format that works
+    # Database Configuration - Simple psycopg2 approach
     DATABASE_URL = os.environ.get('DATABASE_URL')
     
     if DATABASE_URL:
-        # Convert to psycopg format with SSL
+        # Simple postgresql format
         if DATABASE_URL.startswith('postgres://'):
-            SQLALCHEMY_DATABASE_URI = DATABASE_URL.replace('postgres://', 'postgresql+psycopg://')
-        elif DATABASE_URL.startswith('postgresql://'):
-            SQLALCHEMY_DATABASE_URI = DATABASE_URL.replace('postgresql://', 'postgresql+psycopg://')
+            SQLALCHEMY_DATABASE_URI = DATABASE_URL.replace('postgres://', 'postgresql://')
         else:
             SQLALCHEMY_DATABASE_URI = DATABASE_URL
-        
-        # Add SSL context for psycopg3
-        if 'sslmode=' not in SQLALCHEMY_DATABASE_URI:
-            separator = '&' if '?' in SQLALCHEMY_DATABASE_URI else '?'
-            SQLALCHEMY_DATABASE_URI += f'{separator}sslmode=require'
     else:
         SQLALCHEMY_DATABASE_URI = 'sqlite:///products.db'
     
