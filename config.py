@@ -10,15 +10,22 @@ class Config:
     SUPABASE_URL = os.environ.get('SUPABASE_URL')
     SUPABASE_KEY = os.environ.get('SUPABASE_KEY')
     
-    # Database Configuration - simplified for maximum compatibility
+    # Database Configuration - pg8000 for Python 3.13 compatibility
     DATABASE_URL = os.environ.get('DATABASE_URL')
     
     if DATABASE_URL:
-        # Simple URL conversion for psycopg2-binary
+        # Convert to pg8000 format for Python 3.13 compatibility
         if DATABASE_URL.startswith('postgres://'):
-            SQLALCHEMY_DATABASE_URI = DATABASE_URL.replace('postgres://', 'postgresql://')
+            SQLALCHEMY_DATABASE_URI = DATABASE_URL.replace('postgres://', 'postgresql+pg8000://')
+        elif DATABASE_URL.startswith('postgresql://'):
+            SQLALCHEMY_DATABASE_URI = DATABASE_URL.replace('postgresql://', 'postgresql+pg8000://')
         else:
             SQLALCHEMY_DATABASE_URI = DATABASE_URL
+        
+        # Add SSL for pg8000
+        if 'sslmode=' not in SQLALCHEMY_DATABASE_URI:
+            separator = '&' if '?' in SQLALCHEMY_DATABASE_URI else '?'
+            SQLALCHEMY_DATABASE_URI += f'{separator}sslmode=require'
     else:
         SQLALCHEMY_DATABASE_URI = 'sqlite:///products.db'
     
