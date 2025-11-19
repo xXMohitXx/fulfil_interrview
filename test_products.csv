@@ -1,0 +1,11 @@
+name,sku,description,price,quantity,category
+iPhone 15 Pro,IP15P001,Latest iPhone with Pro features,999.99,50,Electronics
+Samsung Galaxy S24,SG24001,Premium Android smartphone,899.99,30,Electronics
+MacBook Air M3,MBA24001,Lightweight laptop with M3 chip,1299.99,20,Computers
+iPad Pro 12.9,IP12P001,Professional tablet for creators,1099.99,15,Tablets
+AirPods Pro 2,APP2001,Premium wireless earbuds,249.99,100,Audio
+Dell XPS 13,DX13001,Ultra-portable Windows laptop,1099.99,25,Computers
+Sony WH-1000XM5,SW1000X5,Noise cancelling headphones,399.99,40,Audio
+Nintendo Switch OLED,NSW24001,Gaming console with OLED screen,349.99,60,Gaming
+PlayStation 5,PS5001,Next-gen gaming console,499.99,10,Gaming
+Xbox Series X,XSX001,Microsoft gaming console,499.99,12,Gaming

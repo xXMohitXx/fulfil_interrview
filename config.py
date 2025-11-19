@@ -10,24 +10,40 @@ class Config:
     SUPABASE_URL = os.environ.get('SUPABASE_URL')
     SUPABASE_KEY = os.environ.get('SUPABASE_KEY')
     
-    # Database Configuration (Supabase PostgreSQL)
+    # Database Configuration with multiple connection strategies
     DATABASE_URL = os.environ.get('DATABASE_URL')
-    if DATABASE_URL:
-        if DATABASE_URL.startswith('postgres://'):
-            DATABASE_URL = DATABASE_URL.replace('postgres://', 'postgresql+pg8000://')
-        elif DATABASE_URL.startswith('postgresql://'):
-            DATABASE_URL = DATABASE_URL.replace('postgresql://', 'postgresql+pg8000://')
-        
-        # Add SSL configuration for pg8000 driver (uses different parameter name)
-        if 'ssl_context=' not in DATABASE_URL:
-            separator = '&' if '?' in DATABASE_URL else '?'
-            DATABASE_URL += f'{separator}ssl_context=true'
     
-    SQLALCHEMY_DATABASE_URI = DATABASE_URL
+    if DATABASE_URL:
+        # Strategy 1: Try psycopg2 first (most reliable for production)
+        SQLALCHEMY_DATABASE_URI_PSYCOPG2 = DATABASE_URL
+        if SQLALCHEMY_DATABASE_URI_PSYCOPG2.startswith('postgres://'):
+            SQLALCHEMY_DATABASE_URI_PSYCOPG2 = SQLALCHEMY_DATABASE_URI_PSYCOPG2.replace('postgres://', 'postgresql://')
+        
+        # Strategy 2: pg8000 fallback with proper SSL
+        SQLALCHEMY_DATABASE_URI_PG8000 = DATABASE_URL
+        if SQLALCHEMY_DATABASE_URI_PG8000.startswith('postgres://'):
+            SQLALCHEMY_DATABASE_URI_PG8000 = SQLALCHEMY_DATABASE_URI_PG8000.replace('postgres://', 'postgresql+pg8000://')
+        elif SQLALCHEMY_DATABASE_URI_PG8000.startswith('postgresql://'):
+            SQLALCHEMY_DATABASE_URI_PG8000 = SQLALCHEMY_DATABASE_URI_PG8000.replace('postgresql://', 'postgresql+pg8000://')
+        
+        # Add SSL for pg8000
+        if 'ssl_context=' not in SQLALCHEMY_DATABASE_URI_PG8000:
+            separator = '&' if '?' in SQLALCHEMY_DATABASE_URI_PG8000 else '?'
+            SQLALCHEMY_DATABASE_URI_PG8000 += f'{separator}ssl_context=true'
+        
+        # Start with psycopg2, fallback to pg8000
+        SQLALCHEMY_DATABASE_URI = SQLALCHEMY_DATABASE_URI_PSYCOPG2
+    else:
+        SQLALCHEMY_DATABASE_URI = 'sqlite:///products.db'
+    
     SQLALCHEMY_ENGINE_OPTIONS = {
         'pool_pre_ping': True,
         'pool_recycle': 300,
-        'pool_timeout': 30
+        'pool_timeout': 30,
+        'connect_args': {
+            'connect_timeout': 30,
+            'application_name': 'fulfil_interview_app'
+        }
     }
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     
